@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Roadmap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-anim"></div>
+    <div class="glass-orb orb-top-right"></div>
+    <div class="glass-orb orb-bottom-left"></div>
+
+    <nav class="glass-nav">
+        <a href="index.html" class="nav-link">Upload Resume</a>
+        <a href="roadmap.html" class="nav-link active">View Roadmap</a>
+    </nav>
+
+    <main class="dashboard-container roadmap-container">
+        <section class="glass-card">
+            <header class="card-header">
+                <div class="icon-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+                </div>
+                <h1>Career Roadmap</h1>
+                <p>Enter your candidate name to view your generated path</p>
+            </header>
+
+            <form id="fetch-roadmap-form" class="dynamic-form">
+                <div class="search-bar">
+                    <input type="text" id="roadmap-name" placeholder="E.g. sampleuser" required autocomplete="off">
+                    <button type="submit" class="submit-btn search-btn" id="fetch-btn">
+                        <span class="btn-text">Generate View</span>
+                        <span class="btn-loader"></span>
+                    </button>
+                </div>
+                <div class="feedback-message" id="roadmap-message"></div>
+            </form>
+
+            <div class="roadmap-timeline" id="roadmap-timeline">
+                <!-- Timeline items will be injected here via JS -->
+            </div>
+        </section>
+    </main>
+
+    <script src="roadmap.js"></script>
+</body>
+</html>
