@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Python & Secrets ###
+.env
+__pycache__/
+*.pkl
+.venv/
+venv/

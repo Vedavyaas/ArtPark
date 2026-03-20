@@ -1,0 +1,107 @@
+[
+  {
+    "id": "COURSE_TECH_001",
+    "title": "Foundational Linux & Networking",
+    "description": "Basic Linux commands, bash scripting, and networking fundamentals like TCP/IP and DNS.",
+    "duration": "1 Week",
+    "prerequisites": []
+  },
+  {
+    "id": "COURSE_TECH_002",
+    "title": "Docker Containerization Fundamentals",
+    "description": "Introduction to linux containers, writing efficient Dockerfiles, and utilizing image registries.",
+    "duration": "1 Week",
+    "prerequisites": ["COURSE_TECH_001"]
+  },
+  {
+    "id": "COURSE_TECH_003",
+    "title": "Advanced Kubernetes Deployment",
+    "description": "Orchestrating containerized applications, configuring production clusters, and auto-scaling services.",
+    "duration": "2 Weeks",
+    "prerequisites": ["COURSE_TECH_002"]
+  },
+  {
+    "id": "COURSE_TECH_004",
+    "title": "AWS Cloud Practitioner Basics",
+    "description": "Fundamental concepts of AWS, essential cloud deployments, S3, and EC2 basics.",
+    "duration": "1 Week",
+    "prerequisites": []
+  },
+  {
+    "id": "COURSE_TECH_005",
+    "title": "Spring Security & OAuth2",
+    "description": "Securing REST APIs, implementing JWT authentication, and integrating full OAuth2 flows.",
+    "duration": "2 Weeks",
+    "prerequisites": []
+  },
+  {
+    "id": "COURSE_TECH_006",
+    "title": "Enterprise Database Optimization",
+    "description": "Indexing strategies, query execution plan optimization, and handling complex Postgres/H2 setups.",
+    "duration": "1.5 Weeks",
+    "prerequisites": []
+  },
+  {
+    "id": "COURSE_HR_001",
+    "title": "Corporate Compliance & HR Law",
+    "description": "Understanding federal regulations, employee rights, and internal HR policy drafting.",
+    "duration": "2 Weeks",
+    "prerequisites": []
+  },
+  {
+    "id": "COURSE_HR_002",
+    "title": "Effective Employee Onboarding Operations",
+    "description": "Logistics and scheduling for training sequences and new-hire orientation procedures.",
+    "duration": "1 Week",
+    "prerequisites": ["COURSE_HR_001"]
+  },
+  {
+    "id": "COURSE_HR_003",
+    "title": "Advanced HRIS Analytics",
+    "description": "Mastering Human Resources Information Systems, pulling predictive analytics, and managing databases.",
+    "duration": "1.5 Weeks",
+    "prerequisites": ["COURSE_HR_001"]
+  },
+  {
+    "id": "COURSE_BIZ_001",
+    "title": "Agile Scrum Essentials",
+    "description": "Foundations of Agile project management, sprint planning, and backlog grooming.",
+    "duration": "1 Week",
+    "prerequisites": []
+  },
+  {
+    "id": "COURSE_BIZ_002",
+    "title": "Strategic Communication & Meeting Facilitation",
+    "description": "Best practices for presenting roadmaps, facilitating enterprise meetings, and client interaction.",
+    "duration": "1 Week",
+    "prerequisites": ["COURSE_BIZ_001"]
+  },
+  {
+    "id": "COURSE_DS_001",
+    "title": "Python Basics for Data Science",
+    "description": "Core Python programming, variables, loops, functions, and standard libraries.",
+    "duration": "1 Week",
+    "prerequisites": []
+  },
+  {
+    "id": "COURSE_DS_002",
+    "title": "Data Analytics with Pandas & NumPy",
+    "description": "Data wrangling, cleaning, manipulation, and exploratory data analysis statistics.",
+    "duration": "1.5 Weeks",
+    "prerequisites": ["COURSE_DS_001"]
+  },
+  {
+    "id": "COURSE_DS_003",
+    "title": "Machine Learning Foundations",
+    "description": "Supervised and unsupervised learning, regression, classification, and model evaluation (Scikit-Learn).",
+    "duration": "2 Weeks",
+    "prerequisites": ["COURSE_DS_002"]
+  },
+  {
+    "id": "COURSE_DS_004",
+    "title": "Advanced Deep Learning (PyTorch)",
+    "description": "Neural networks, backpropagation, CNNs for computer vision, and building PyTorch models.",
+    "duration": "3 Weeks",
+    "prerequisites": ["COURSE_DS_003"]
+  }
+]

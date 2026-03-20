@@ -522,6 +522,66 @@ body {
     line-height: 1.6;
 }
 
+/* Metrics Dashboard */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2.5rem;
+    animation: fadeUpIn 0.5s ease forwards;
+}
+
+.metric-card {
+    background: rgba(15, 17, 26, 0.6);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f8fafc;
+    background: linear-gradient(to right, #6366f1, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Reasoning Trace Styling */
+.reasoning-trace {
+    margin-top: 1rem;
+    padding: 0.85rem;
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 3px solid var(--accent-glow);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    font-style: italic;
+}
+.reasoning-trace strong {
+    color: var(--accent-glow);
+    font-weight: 600;
+    font-style: normal;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
 /* Navigation Styles */
 .glass-nav {
     display: flex;
@@ -686,4 +746,23 @@ body {
     color: #cbd5e1;
     font-size: 0.95rem;
     line-height: 1.6;
+}
+
+/* Reasoning Trace Styling */
+.reasoning-trace {
+    margin-top: 1rem;
+    padding: 0.85rem;
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 3px solid var(--accent-glow);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    font-style: italic;
+}
+.reasoning-trace strong {
+    color: var(--accent-glow);
+    font-weight: 600;
+    font-style: normal;
+    display: block;
+    margin-bottom: 0.25rem;
 }

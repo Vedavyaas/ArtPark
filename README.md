@@ -1,40 +1,47 @@
-# AI-Adaptive Onboarding Engine
+# ArtPark: AI-Adaptive Onboarding Engine 🚀
 
-## 1. Value Proposition & Problem Statement
-Current corporate onboarding heavily utilizes static, "one-size-fits-all" curricula, resulting in significant inefficiencies. The **AI-Adaptive Onboarding Engine** tackles this challenge by intelligently parsing a new hire's current capabilities (via their Resume) against role expectations (via the target Job Description). It dynamically uncovers exact missing competencies and maps a completely optimized, customized training pathway to reach role-specific competency.
+ArtPark is a next-generation corporate onboarding and up-skilling engine designed to eliminate redundant training by dynamically analyzing candidate skill-gaps and rendering chronologically optimized learning roadmaps. 
 
-## 2. High-Level Logic: Skill-Gap Analysis & Adaptive Pathing
-Our logic is executed via a synchronized, end-to-end processing pipeline:
-1. **Ingestion & Parsing:** Candidate `Resume` and role `Job Description` (JD) PDFs are uploaded via the web interface. We use `Apache PDFBox` to strip raw text and isolate key delimiters targeting `SKILLS`, `EXPERIENCE`, and `REQUIREMENTS`.
-2. **Gap Identification:** The filtered sub-sections are handed directly to our proprietary Python inference engine (`localhost:8000`). By cross-referencing extracted candidate skills against the firm's strict JD requirements, the model isolates the exact technical "delta" (or skill gap).
-3. **Adaptive Pathing Generation:** Rather than a static list, the model computes an adaptive learning roadmap. It generates a phased, chronological CSV payload containing the Title, Description, and Estimated Duration for each required upskilling step, entirely skipping concepts the candidate has already mastered. 
+This repository was purpose-built to execute on the challenge of **"Dynamic Pathing vs One-Size-Fits-All"** curricula.
 
-## 3. Setup & Execution Instructions
+## 🧠 System Architecture: Neuro-Symbolic AI
+Unlike naive applications that rely entirely on unpredictable, hallucination-prone Large Language Models to generate business logic, ArtPark utilizes a robust **Neuro-Symbolic** (Hybrid Core) architecture to guarantee 100% deterministic, auditable, and mathematically flawless training paths.
 
-### Prerequisites
-* Java 17 or higher
-* Maven 3.8+
-* Python ML Service backend active on `http://localhost:8000/generate-roadmap`
+### 1. Data Extraction Pipeline (Gemini 2.5)
+We utilize Google Gemini strictly as a highly constrained NLP Parsing Engine (`response_mime_type="application/json"`). It scans raw Job Descriptions and Resumes to extract pure, algebraic Arrays of keywords representing the candidate's exact skill topology. 
 
-### Running the Application
-1. Clone this repository locally.
-2. Ensure the companion Python ML backend is active and listening on port `8000`.
-3. Build the backend using the included Maven wrapper:
-   ```bash
-   ./mvnw clean install
-   ```
-4. Start the Spring Boot Application:
-   ```bash
-   ./mvnw spring-boot:run
-   ```
-5. Navigate to `http://localhost:8080/` in your browser.
-6. Upload a sample Resume (PDF) and a standard Job Description (PDF). Click **Generate Roadmap** to kick off the skill-gap analysis process.
+### 2. The Algorithmic Adaptive Logic Engine (Python)
+The hackathon specifically requires original Adaptive Logic. We engineered a proprietary Python backend utilizing **Set-Theory** and a custom **Length-Agnostic Overlap Coefficient Matrix**.
+*   The engine mathematically subtracts the candidate's skills from the JD's requirements.
+*   It then runs a **Jaccard-style token overlap** to score every module in our native `course_catalog.json` against the missing skill gaps, mapping the best courses dynamically.
 
-## 4. Dependencies & Tech Stack
-* **Java 17 / Spring Boot 3.x** - Core routing and business logic.
-* **Spring Web MVC** - Handling REST API endpoints and form ingestion.
-* **Apache PDFBox 3.0.1** - Handling heavy-lifting PDF-to-Text extraction.
-* **Vanilla JavaScript & CSS** - Frontend dynamically generating the animated, interactive roadmap UI.
-* **H2 Database & Spring Data JPA** - Pre-configured ORM/DB scaffolds for extended features.
+### 3. Directed Acyclic Graph (DAG) Prerequisite Traversal
+To achieve true curriculum depth, the Engine utilizes a custom **Topological DFS (Depth-First Search) Algorithm**. 
+*   If a candidate requires an advanced skill (e.g. *Kubernetes*), the DAG Traversal automatically injects mathematical prerequisites (e.g. *Linux Fundamentals*) chronologically before the advanced course.
+*   **Dynamic Pruning:** If the mathematics determine the candidate *already masters* the prerequisite, the DAG intelligently drops the branch, ensuring zero redundant training time!
 
-*(Note: Ensure proper dataset citations and metrics are outlined in the accompanying 5-slide Technical presentation!)*
+## 📊 ROI Metrics Dashboard
+Real-world deployments require measurable impact. The frontend features a beautiful, glassmorphism Metrics Overlay that calculates the exact percentage of **Profile Match** and the volume of **Missing Skills**, visually demonstrating the precise ROI of the generated training curriculum before the roadmap is even explored.
+
+## 🛠️ Tech Stack
+*   **Frontend:** Vanilla JS, HTML5, CSS3 Glassmorphism UI
+*   **Middleware (Parsing):** Java Spring Boot & Apache PDFBox (File IO & Structural Extraction)
+*   **Backend (Adaptive Engine):** Python 3, FastAPI, Google GenAI SDK
+
+## 🚀 How to Run Locally
+
+### 1. Start the Java Parser
+```bash
+./mvnw spring-boot:run
+```
+
+### 2. Start the Python Adaptive Engine
+```bash
+cd python-ml-backend
+pip install -r requirements.txt
+python main.py
+```
+*(Ensure you have a `.env` file containing `GEMINI_API_KEY=your_key` in the Python directory).*
+
+---
+*Built for the Hackathon Challenge. Adaptive Engine logic is 100% original implementation.*

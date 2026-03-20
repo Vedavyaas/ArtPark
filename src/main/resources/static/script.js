@@ -104,9 +104,24 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                const csvText = await response.text();
+                const rawText = await response.text();
+                let responseBody;
+                try {
+                    responseBody = JSON.parse(rawText);
+                } catch(e) {
+                    responseBody = { csv: rawText };
+                }
+                
                 showFeedback('Upload successful! Roadmap Generated.', 'success');
-                renderRoadmap(csvText);
+                
+                if (responseBody.metrics) {
+                    document.getElementById('metrics-dashboard').style.display = 'grid';
+                    document.getElementById('metric-match').textContent = responseBody.metrics.match_percentage + "%";
+                    document.getElementById('metric-missing').textContent = responseBody.metrics.missing_skills_count;
+                    document.getElementById('metric-courses').textContent = responseBody.metrics.courses_required;
+                }
+                
+                renderRoadmap(responseBody.csv || responseBody);
             } else {
                 throw new Error('Upload failed with status: ' + response.status);
             }
@@ -130,14 +145,34 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
+        function parseCSVLine(line) {
+            const result = [];
+            let currentStr = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(currentStr.trim().replace(/^"|"$/g, ''));
+                    currentStr = '';
+                } else {
+                    currentStr += char;
+                }
+            }
+            result.push(currentStr.trim().replace(/^"|"$/g, ''));
+            return result;
+        }
+
         const dataLines = lines.slice(1);
         dataLines.forEach((line, index) => {
-            const match = line.split(',');
-            if (match.length >= 3) {
-                const phase = match[0];
-                const title = match[1];
-                let desc = match.slice(2, match.length - 1).join(',');
-                let duration = match[match.length - 1];
+            if (!line.trim()) return;
+            const match = parseCSVLine(line);
+            if (match && match.length >= 3) {
+                const title = match[0];
+                const desc = match[1];
+                const duration = match[2];
+                const reasoning = match.length > 3 ? match[3] : "Standard curriculum progression.";
                 
                 let node = document.createElement('div');
                 node.className = 'timeline-item fade-in';
@@ -150,15 +185,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="timeline-content glass-effect">
                         <div class="timeline-header">
-                            <span class="timeline-phase">Phase ${phase}</span>
+                            <span class="timeline-phase">Phase ${index + 1}</span>
                             <span class="timeline-duration">${duration}</span>
                         </div>
                         <h3>${title}</h3>
                         <p>${desc}</p>
+                        <div class="reasoning-trace">
+                            <strong>AI Reasoning:</strong> ${reasoning}
+                        </div>
                     </div>
                 `;
                 timeline.appendChild(node);
             }
         });
+
     }
 });
