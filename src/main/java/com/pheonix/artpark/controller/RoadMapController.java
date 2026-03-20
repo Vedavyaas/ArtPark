@@ -1,29 +1,21 @@
 package com.pheonix.artpark.controller;
 
-import com.pheonix.artpark.service.RoadMapGeneratorService;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.pheonix.artpark.service.ResumeIngestionService;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class RoadMapController {
-    private final RoadMapGeneratorService roadMapRepository;
+    private final ResumeIngestionService resumeIngestionService;
 
-    public RoadMapController(RoadMapGeneratorService roadMapGeneratorService) {
-        this.roadMapRepository = roadMapGeneratorService;
+    public RoadMapController(ResumeIngestionService resumeIngestionService) {
+        this.resumeIngestionService = resumeIngestionService;
     }
 
-    @GetMapping("/get/roadmap")
-    public String getRoadmap(@RequestParam String name) {
-        String result = roadMapRepository.getRoadMap(name);
-        if (result == null || result.equals("Username not found") || result.equals("Not updated")) {
-            return "Phase,Title,Description,Duration\n" +
-                   "1,Foundation,Master Java 17 and Core OOP principles,2 weeks\n" +
-                   "2,Spring ecosystem,Learn Spring Boot, Dependency Injection, and Context,3 weeks\n" +
-                   "3,Data Access,Delve into JPA, Hibernate, and advanced SQL operations,2 weeks\n" +
-                   "4,Security,Implement JWT Auth and RBAC with Spring Security,2 weeks\n" +
-                   "5,Cloud Deployment,Dockerize and deploy microservices on AWS/Vercel,3 weeks";
-        }
-        return result;
+    @PostMapping("/process")
+    public String generateRoadmap(@RequestParam MultipartFile resumeFile, @RequestParam MultipartFile jdFile) {
+        return resumeIngestionService.processFilesAndGenerateRoadmap(resumeFile, jdFile);
     }
 }

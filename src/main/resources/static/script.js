@@ -1,93 +1,79 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('ingest-form');
-    const dropArea = document.getElementById('drop-area');
-    const fileInput = document.getElementById('file');
-    const fileInfo = document.getElementById('file-info');
-    const fileNameDisplay = document.getElementById('file-name');
-    const removeFileBtn = document.getElementById('remove-file');
     const submitBtn = document.getElementById('submit-btn');
     const feedbackMsg = document.getElementById('feedback-message');
+    const timeline = document.getElementById('roadmap-timeline');
 
-    // Make the entire drop area clickable
-    dropArea.addEventListener('click', () => {
-        fileInput.click();
-    });
+    function setupDropZone(dropId, inputId, infoId, nameId, removeId) {
+        const dropArea = document.getElementById(dropId);
+        const fileInput = document.getElementById(inputId);
+        const fileInfo = document.getElementById(infoId);
+        const fileNameDisplay = document.getElementById(nameId);
+        const removeFileBtn = document.getElementById(removeId);
 
-    // Handle drag and drop events
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, preventDefaults, false);
-    });
+        dropArea.addEventListener('click', () => fileInput.click());
 
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, e => {
+                e.preventDefault(); e.stopPropagation();
+            }, false);
+        });
 
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropArea.addEventListener(eventName, () => {
-            dropArea.classList.add('dragover');
-        }, false);
-    });
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.add('dragover'), false);
+        });
 
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, () => {
-            dropArea.classList.remove('dragover');
-        }, false);
-    });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.remove('dragover'), false);
+        });
 
-    dropArea.addEventListener('drop', (e) => {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        handleFiles(files);
-    });
+        dropArea.addEventListener('drop', (e) => handleFiles(e.dataTransfer.files));
+        fileInput.addEventListener('change', function() { handleFiles(this.files); });
 
-    fileInput.addEventListener('change', function() {
-        handleFiles(this.files);
-    });
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                const validTypes = ['.pdf', '.doc', '.docx'];
+                const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+                
+                if (!validTypes.includes(fileExtension)) {
+                    showFeedback('Invalid file type. Please upload a PDF or DOCX file.', 'error');
+                    resetFileInput();
+                    return;
+                }
 
-    function handleFiles(files) {
-        if (files.length > 0) {
-            const file = files[0];
-            const validTypes = ['.pdf', '.doc', '.docx'];
-            const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-            
-            if (!validTypes.includes(fileExtension)) {
-                showFeedback('Invalid file type. Please upload a PDF or DOCX file.', 'error');
-                resetFileInput();
-                return;
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+
+                fileNameDisplay.textContent = file.name;
+                dropArea.style.display = 'none';
+                fileInfo.style.display = 'flex';
             }
-
-            // Assign dragged file back to input so it's submitted with form automatically
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            fileInput.files = dataTransfer.files;
-
-            fileNameDisplay.textContent = file.name;
-            dropArea.style.display = 'none';
-            fileInfo.style.display = 'flex';
         }
+
+        removeFileBtn.addEventListener('click', () => resetFileInput());
+
+        function resetFileInput() {
+            fileInput.value = '';
+            dropArea.style.display = 'block';
+            fileInfo.style.display = 'none';
+        }
+        
+        return { resetFileInput };
     }
 
-    removeFileBtn.addEventListener('click', () => {
-        resetFileInput();
-    });
-
-    function resetFileInput() {
-        fileInput.value = '';
-        dropArea.style.display = 'block';
-        fileInfo.style.display = 'none';
-    }
+    const resumeZone = setupDropZone('drop-area-resume', 'file-resume', 'file-info-resume', 'file-name-resume', 'remove-file-resume');
+    const jdZone = setupDropZone('drop-area-jd', 'file-jd', 'file-info-jd', 'file-name-jd', 'remove-file-jd');
 
     function showFeedback(message, type) {
         feedbackMsg.textContent = message;
         feedbackMsg.className = `feedback-message ${type} show`;
-        
+        feedbackMsg.style.display = 'block';
         setTimeout(() => {
             feedbackMsg.classList.remove('show');
             setTimeout(() => {
-                if(!feedbackMsg.classList.contains('show')) {
-                    feedbackMsg.style.display = 'none';
-                }
+                if(!feedbackMsg.classList.contains('show')) feedbackMsg.style.display = 'none';
             }, 300);
         }, 5000);
     }
@@ -95,41 +81,84 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const file = fileInput.files[0];
-        const name = document.getElementById('name').value.trim();
+        const resumeFile = document.getElementById('file-resume').files[0];
+        const jdFile = document.getElementById('file-jd').files[0];
 
-        if (!file || !name) {
-            showFeedback('Please provide both name and resume.', 'error');
+        if (!resumeFile || !jdFile) {
+            showFeedback('Please provide both Resume and Job Description.', 'error');
             return;
         }
 
         const formData = new FormData();
-        formData.append('name', name);
-        formData.append('file', file);
+        formData.append('resumeFile', resumeFile);
+        formData.append('jdFile', jdFile);
 
         submitBtn.classList.add('loading');
         submitBtn.disabled = true;
+        timeline.innerHTML = '';
 
         try {
-            const response = await fetch('/ingest/resume', {
+            const response = await fetch('/process', {
                 method: 'POST',
                 body: formData
             });
 
             if (response.ok) {
-                const resultText = await response.text();
-                showFeedback(resultText || 'Upload successful!', 'success');
-                form.reset();
-                resetFileInput();
+                const csvText = await response.text();
+                showFeedback('Upload successful! Roadmap Generated.', 'success');
+                renderRoadmap(csvText);
             } else {
                 throw new Error('Upload failed with status: ' + response.status);
             }
         } catch (error) {
             console.error('Submission Error:', error);
-            showFeedback('Failed to ingest resume. Please try again.', 'error');
+            showFeedback('Failed to process documents. Please try again.', 'error');
         } finally {
             submitBtn.classList.remove('loading');
             submitBtn.disabled = false;
         }
     });
+
+    function renderRoadmap(csvString) {
+        if (!csvString || csvString.includes("Failed") || csvString.includes("Error")) {
+            showFeedback(csvString || "Failed to extract roadmap properly.", "error");
+            return;
+        }
+        const lines = csvString.trim().split('\n');
+        if (lines.length <= 1) {
+            showFeedback("Invalid Roadmap data format.", "error");
+            return;
+        }
+        
+        const dataLines = lines.slice(1);
+        dataLines.forEach((line, index) => {
+            const match = line.split(',');
+            if (match.length >= 3) {
+                const phase = match[0];
+                const title = match[1];
+                let desc = match.slice(2, match.length - 1).join(',');
+                let duration = match[match.length - 1];
+                
+                let node = document.createElement('div');
+                node.className = 'timeline-item fade-in';
+                node.style.animationDelay = `${index * 0.15}s`;
+                
+                node.innerHTML = `
+                    <div class="timeline-marker">
+                        <div class="marker-dot"></div>
+                        <div class="marker-line"></div>
+                    </div>
+                    <div class="timeline-content glass-effect">
+                        <div class="timeline-header">
+                            <span class="timeline-phase">Phase ${phase}</span>
+                            <span class="timeline-duration">${duration}</span>
+                        </div>
+                        <h3>${title}</h3>
+                        <p>${desc}</p>
+                    </div>
+                `;
+                timeline.appendChild(node);
+            }
+        });
+    }
 });

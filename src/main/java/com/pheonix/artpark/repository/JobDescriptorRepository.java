@@ -2,4 +2,5 @@ package com.pheonix.artpark.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoadMapRepository extends JpaRepository<RoadMapEntity, Long> { }
+public interface JobDescriptorRepository extends JpaRepository<JobDescriptorEntity, Long> {
+}
