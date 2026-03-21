@@ -30,18 +30,19 @@ Real-world deployments require measurable impact. The frontend features a beauti
 
 ## 🚀 How to Run Locally
 
-### 1. Start the Java Parser
-```bash
-./mvnw spring-boot:run
-```
+### Run with Docker (Both Services)
+You can run both the Java Parser and the Python Adaptive Engine simultaneously using Docker:
 
-### 2. Start the Python Adaptive Engine
+Make sure docker daemon is running in background
+
 ```bash
-cd python-ml-backend
-pip install -r requirements.txt
-python main.py
+docker build -t artpark .
+docker run -p 8092:8092 -p 8000:8000 -e GEMINI_API_KEY="YOUR_GEMINI_API_KEY" artpark
 ```
-*(Ensure you have a `.env` file containing `GEMINI_API_KEY=your_key` in the Python directory).*
+This will run both services and expose them to your local machine.
+
+* The Java service (which hosts the interactive UI) will be available at [http://localhost:8092](http://localhost:8092)
+* The Python Adaptive Engine API will be available at [http://localhost:8000](http://localhost:8000)
 
 ---
 *Built for the Hackathon Challenge. Adaptive Engine logic is 100% original implementation.*
